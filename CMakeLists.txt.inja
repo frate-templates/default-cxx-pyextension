@@ -49,12 +49,12 @@ set(BUILD_DIR {{ build_dir }})
 set_target_properties({{name}} PROPERTIES RUNTIME_OUTPUT_DIRECTORY {{build_dir}})
 
 if (WIN32)
-  set_target_properties (core PROPERTIES SUFFIX ".pyd")
+  set_target_properties ({{name}} PROPERTIES SUFFIX ".pyd")
 else()
-  set_target_properties (core PROPERTIES SUFFIX ".so")
+  set_target_properties ({{name}} PROPERTIES SUFFIX ".so")
 endif()
 
-target_link_libraries (core "${PYTHON_LIBRARIES}")
+target_link_libraries ({{name}} "${PYTHON_LIBRARIES}")
 
 {{ frate.targets("")  }}
 
