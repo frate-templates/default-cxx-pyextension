@@ -16,6 +16,7 @@ set (Python_ADDITIONAL_VERSIONS 3)
 find_package (PythonLibs REQUIRED)
 find_package (PythonInterp REQUIRED)
 
+include_directories ("${PYTHON_INCLUDE_DIRS}")
 
 {{ frate.sccache("") }}
 {{ frate.ccache("") }}
@@ -41,7 +42,7 @@ if(NOT DEFINED RELEASE)
   set(RELEASE 0)
 endif()
 
-add_library({${PROJECT_NAME}} SHARED ${SOURCES})
+add_library(${PROJECT_NAME} SHARED ${SOURCES})
 
 {{ frate.compile_modes("") }}
 
