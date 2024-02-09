@@ -1,0 +1,29 @@
+#include <Python.h>
+
+
+PyObject* create_list(PyObject* self, PyObject* args) {
+  PyObject* list = PyList_New(0);
+  int pass = PyList_Append(list, args);
+  if (pass == -1) {
+    return nullptr;
+  }
+  return list;
+}
+
+PyMethodDef {{name}}_methods[] = {
+  { "create_list",  create_list, METH_VARARGS, "creates a list" },
+  { nullptr, nullptr, 0, nullptr }
+};
+
+struct PyModuleDef {{name}}_module = {
+  PyModuleDef_HEAD_INIT,
+  "_{{name}}",
+  nullptr,
+  -1,
+  {{name}}_methods
+};
+
+
+PyMODINIT_FUNC PyInit__{{name}}(void) {
+  return PyModule_Create(&{{name}}_module);
+}

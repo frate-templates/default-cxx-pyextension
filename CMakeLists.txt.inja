@@ -1,0 +1,62 @@
+{{ frate.toolchains("") }}
+
+cmake_minimum_required( VERSION {{ cmake_version }} )
+project(
+  {{ name }}
+  VERSION {{ version }}
+  {%if lang == "cpp"%}LANGUAGES CXX
+  {%else if lang == "c"%}LANGUAGES C
+  {%endif%}
+)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_STANDARD {{ lang_version }})
+include(cmake/CPM.cmake)
+
+set (Python_ADDITIONAL_VERSIONS 3)
+find_package (PythonLibs REQUIRED)
+find_package (PythonInterp REQUIRED)
+
+
+{{ frate.sccache("") }}
+{{ frate.ccache("") }}
+
+
+{{ frate.packages("") }}
+
+file(GLOB_RECURSE SOURCES RELATIVE ${CMAKE_SOURCE_DIR}
+  "src/**.cpp"
+  "src/**.c"
+  "src/**/**.cpp"
+  "src/**/**.c"
+)
+
+message("Sources: ${SOURCES}")
+
+{{ frate.flags("") }}
+
+include_directories(${CMAKE_SOURCE_DIR}/{{ include_dir }})
+set(HEADER_DIR ${CMAKE_SOURCE_DIR}/{{ include_dir }})
+
+if(NOT DEFINED RELEASE)
+  set(RELEASE 0)
+endif()
+
+add_library({${PROJECT_NAME}} ${SOURCES})
+
+{{ frate.compile_modes("") }}
+
+set(BUILD_DIR {{ build_dir }})
+set_target_properties({{name}} PROPERTIES RUNTIME_OUTPUT_DIRECTORY {{build_dir}})
+
+if (WIN32)
+  set_target_properties (core PROPERTIES SUFFIX ".pyd")
+else()
+  set_target_properties (core PROPERTIES SUFFIX ".so")
+endif()
+
+target_link_libraries (core "${PYTHON_LIBRARIES}")
+
+{{ frate.targets("")  }}
+
+{{ frate.cpack("") }}
+

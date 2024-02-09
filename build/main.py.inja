@@ -1,0 +1,4 @@
+from lib._{{name}} import create_list
+
+print(create_list(5))
+print(create_list("hello"))
